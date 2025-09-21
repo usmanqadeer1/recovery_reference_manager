@@ -1,6 +1,6 @@
-# Reference Manager - Django Application
+# Recovery Reference Manager - Django Application
 
-A comprehensive Django web application for managing reference numbers with media files, categories, and Excel import/export functionality.
+A comprehensive Django web application for managing recovery operations with reference numbers, media files, categories, and Excel import/export functionality.
 
 ## 📸 Screenshots
 
@@ -47,6 +47,10 @@ A comprehensive Django web application for managing reference numbers with media
 
 ## Installation & Setup
 
+### Repository
+- **GitHub**: [https://github.com/usmanqadeer1/recovery_reference_manager](https://github.com/usmanqadeer1/recovery_reference_manager)
+- **Clone URL**: `https://github.com/usmanqadeer1/recovery_reference_manager.git`
+
 ### Prerequisites
 - Python 3.8 or higher
 - pip (Python package installer)
@@ -54,8 +58,8 @@ A comprehensive Django web application for managing reference numbers with media
 ### Step 1: Clone or Download the Project
 ```bash
 # If using git
-git clone <repository-url>
-cd reference-manager
+git clone https://github.com/usmanqadeer1/recovery_reference_manager.git
+cd recovery_reference_manager
 
 # Or download and extract the project files
 ```
@@ -80,7 +84,7 @@ pip install -r requirements.txt
 ### Step 4: Database Setup
 ```bash
 # Navigate to the project directory
-cd reference_manager
+cd recovery_reference_manager
 
 # Create database migrations
 python manage.py makemigrations
@@ -108,10 +112,12 @@ The application will be available at: `http://localhost:8000/`
 ## Project Structure
 
 ```
-reference_manager/
+recovery_reference_manager/
 ├── manage.py
 ├── requirements.txt
 ├── README.md
+├── sc.png
+├── .gitignore
 ├── reference_manager/
 │   ├── __init__.py
 │   ├── settings.py
@@ -126,6 +132,7 @@ reference_manager/
     ├── views.py
     ├── forms.py
     ├── urls.py
+    ├── tests.py
     ├── management/
     │   └── commands/
     │       ├── __init__.py
@@ -207,11 +214,11 @@ pip install psycopg2-binary
 pip install mysqlclient
 ```
 
-2. Update `settings.py`:
+2. Update `reference_manager/settings.py`:
 ```python
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # or mysql
+        'ENGINE': 'django.db.backends.postgresql',  # or 'django.db.backends.mysql'
         'NAME': 'your_database_name',
         'USER': 'your_username',
         'PASSWORD': 'your_password',
@@ -294,12 +301,16 @@ For support and questions:
 
 ### Version 1.0.0
 - Initial release
-- Reference management system
-- Media file support
-- Excel import/export
-- Category system
-- Rupee currency support
-- Responsive design
+- Recovery reference management system
+- Media file support (Images & PDFs)
+- Excel import/export functionality
+- Category system for document organization
+- Financial tracking in Indian Rupees
+- Tariff and age tracking
+- Search and filter capabilities
+- Responsive Bootstrap design
+- Django admin interface
+- Sample data creation
 
 ---
 
