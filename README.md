@@ -2,6 +2,20 @@
 
 A comprehensive Django web application for managing reference numbers with media files, categories, and Excel import/export functionality.
 
+## 📸 Screenshots
+
+### Main Dashboard
+![Main Dashboard](sc.png)
+*Home page showing all references with search functionality and reference cards*
+
+### Reference Detail Page
+![Reference Detail](screenshots/reference-detail.png)
+*Detailed view of a reference with all information and media files*
+
+### Excel Import Interface
+![Excel Import](screenshots/excel-import.png)
+*Excel import page with template download and file upload functionality*
+
 ## Features
 
 ### 📋 Core Features
