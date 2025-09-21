@@ -1,0 +1,165 @@
+{% extends 'references/base.html' %}
+
+{% block title %}{{ reference.reference_number }} - Reference Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1>{{ reference.reference_number }}</h1>
+                <h4 class="text-muted">{{ reference.title }}</h4>
+            </div>
+            <div class="btn-group">
+                <a href="{% url 'add_media' reference.id %}" class="btn btn-success">
+                    <i class="fas fa-plus me-1"></i>Add Media
+                </a>
+                <a href="{% url 'edit_reference' reference.id %}" class="btn btn-warning">
+                    <i class="fas fa-edit me-1"></i>Edit Reference
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to List
+                </a>
+            </div>
+        </div>
+
+        <!-- Reference Details -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Reference Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Reference Number:</strong> {{ reference.reference_number }}</p>
+                        <p><strong>Title:</strong> {{ reference.title }}</p>
+                        {% if reference.tariff %}
+                            <p><strong>Tariff:</strong> {{ reference.tariff }}</p>
+                        {% endif %}
+                        {% if reference.age %}
+                            <p><strong>Age:</strong> {{ reference.age }}</p>
+                        {% endif %}
+                        {% if reference.amount %}
+                            <p><strong>Amount:</strong> Rs. {{ reference.amount|floatformat:2 }}</p>
+                        {% endif %}
+                        <p><strong>Created:</strong> {{ reference.created_at|date:"F d, Y \a\t g:i A" }}</p>
+                        <p><strong>Last Updated:</strong> {{ reference.updated_at|date:"F d, Y \a\t g:i A" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Media Files:</strong> {{ reference.media_files.count }} file{{ reference.media_files.count|pluralize }}</p>
+                    </div>
+                </div>
+                
+                {% if reference.description %}
+                    <div class="mt-3">
+                        <strong>Description:</strong>
+                        <p class="mt-2">{{ reference.description|linebreaks }}</p>
+                    </div>
+                {% endif %}
+
+                {% if reference.remarks %}
+                    <div class="mt-3">
+                        <strong>Remarks:</strong>
+                        <p class="mt-2">{{ reference.remarks|linebreaks }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Media Files -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-images me-2"></i>Media Files</h5>
+            </div>
+            <div class="card-body">
+                {% if media_files %}
+                    <div class="row">
+                        {% for media in media_files %}
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        {% if media.media_type == 'image' %}
+                                            <img src="{{ media.file.url }}" alt="{{ media.get_filename }}" 
+                                                 class="img-fluid media-preview mb-3" style="max-height: 200px;">
+                                        {% else %}
+                                            <div class="pdf-icon mb-3">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <h6 class="card-title">{{ media.get_filename }}</h6>
+                                        <p class="card-text">
+                                            <span class="badge bg-{% if media.media_type == 'image' %}info{% else %}danger{% endif %}">
+                                                {{ media.get_media_type_display }}
+                                            </span>
+                                        </p>
+                                        
+                                        {% if media.categories.exists %}
+                                            <div class="mb-2">
+                                                {% for category in media.categories.all %}
+                                                    <span class="badge bg-secondary category-badge me-1">{{ category.name }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if media.remarks %}
+                                            <p class="card-text small text-muted">{{ media.remarks|truncatewords:10 }}</p>
+                                        {% endif %}
+                                        
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ media.uploaded_at|date:"M d, Y" }}
+                                        </small>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="btn-group w-100" role="group">
+                                            <a href="{{ media.file.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-download me-1"></i>Download
+                                            </a>
+                                            {% if media.media_type == 'image' %}
+                                                <button type="button" class="btn btn-outline-info btn-sm" 
+                                                        data-bs-toggle="modal" data-bs-target="#imageModal{{ media.id }}">
+                                                    <i class="fas fa-eye me-1"></i>View
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Image Modal -->
+                            {% if media.media_type == 'image' %}
+                                <div class="modal fade" id="imageModal{{ media.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">{{ media.get_filename }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <img src="{{ media.file.url }}" alt="{{ media.get_filename }}" class="img-fluid">
+                                                {% if media.remarks %}
+                                                    <p class="mt-3">{{ media.remarks }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No media files</h5>
+                        <p class="text-muted">Add some images or PDFs to this reference.</p>
+                        <a href="{% url 'add_media' reference.id %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Add Media Files
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
